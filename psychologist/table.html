@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SchoolMind 138 - Все тесты</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="../Логотип сайта.png?v=2" type="image/png">
+    <link rel="stylesheet" href="../css/style.css?v=9">
+</head>
+<body>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <div class="brand-lockup">
+                <img class="brand-seal" src="../Логотип сайта.png?v=2" alt="Логотип школы №138">
+                <div class="brand-lockup-copy">
+                    <div class="nav-brand">SchoolMind 138</div>
+                    <div class="brand-subtitle">Аналитика · школа №138</div>
+                </div>
+            </div>
+
+            <nav class="nav-links">
+                <a href="../dashboard.html">Главная</a>
+                <a href="../admin.html">Координация</a>
+                <a href="table.html" class="is-active">Все тесты</a>
+                <a href="stats.html">Статистика</a>
+                <button class="btn-logout" onclick="logout()">Выйти</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="page-shell stack-lg">
+        <section class="masthead masthead--compact surface-card surface-card--compact">
+            <div class="masthead-grid masthead-grid--compact">
+                <div class="section-header section-header--compact">
+                    <p class="eyebrow">Журнал</p>
+                    <h1>Все тесты</h1>
+                </div>
+
+                <div class="toolbar-actions toolbar-actions--top">
+                    <button class="btn-primary" onclick="exportToGoogleSheets()">Google Таблицы</button>
+                    <button class="btn-secondary" onclick="downloadCSV()">CSV</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="summary-strip">
+            <article class="summary-item">
+                <span>Результатов</span>
+                <p class="summary-value" id="tests-total">0</p>
+            </article>
+
+            <article class="summary-item">
+                <span>Средний балл</span>
+                <p class="summary-value" id="tests-average">—</p>
+            </article>
+
+            <article class="summary-item">
+                <span>Классов</span>
+                <p class="summary-value" id="tests-classes">0</p>
+            </article>
+
+            <article class="summary-item">
+                <span>Последний тест</span>
+                <p class="summary-value summary-value--compact" id="tests-latest">—</p>
+            </article>
+        </section>
+
+        <section class="filter filter--compact analytics-filter">
+            <div class="filter-control">
+                <label for="class-filter">Класс</label>
+                <select id="class-filter" onchange="loadAllTests()">
+                    <option value="">Все классы</option>
+                </select>
+            </div>
+
+            <div class="form-group filter-search">
+                <label for="tests-search">Поиск</label>
+                <input type="text" id="tests-search" placeholder="Ученик, логин, уровень" oninput="loadAllTests()" autocomplete="off">
+            </div>
+
+            <div id="tests-scope" class="badge filter-badge">Вся школа</div>
+        </section>
+
+        <section class="data-surface surface-card--compact">
+            <div class="section-header section-header--compact">
+                <p class="eyebrow">Результаты</p>
+                <h2>Журнал прохождений</h2>
+                <p id="tests-status" class="section-meta">Все записи по школе.</p>
+            </div>
+
+            <div class="table-wrap">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Дата</th>
+                            <th>Ученик</th>
+                            <th>Класс</th>
+                            <th>Балл</th>
+                            <th>Уровень</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tests-table"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script src="../js/app.js?v=7"></script>
+    <script>
+        checkAuth();
+        loadClasses();
+        loadAllTests();
+    </script>
+</body>
+</html>

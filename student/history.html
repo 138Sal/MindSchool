@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SchoolMind 138 - История</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="../Логотип сайта.png?v=2" type="image/png">
+    <link rel="stylesheet" href="../css/style.css?v=9">
+</head>
+<body>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <div class="brand-lockup">
+                <img class="brand-seal" src="../Логотип сайта.png?v=2" alt="Логотип школы №138">
+                <div class="brand-lockup-copy">
+                    <div class="nav-brand">SchoolMind 138</div>
+                    <div class="brand-subtitle">Кабинет ученика · школа №138</div>
+                </div>
+            </div>
+
+            <nav class="nav-links">
+                <a href="../dashboard.html">Главная</a>
+                <a href="test.html">Тест</a>
+                <a href="history.html" class="is-active">История</a>
+                <button class="btn-logout" onclick="logout()">Выйти</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="page-shell stack-lg">
+        <section class="masthead masthead--compact surface-card surface-card--compact">
+            <div class="section-header section-header--compact">
+                <p class="eyebrow">История</p>
+                <h1>Результаты тестов</h1>
+            </div>
+        </section>
+
+        <section class="surface-card surface-card--compact">
+            <div id="history-list" class="history-list"></div>
+        </section>
+    </main>
+
+    <script src="../js/app.js?v=7"></script>
+    <script>
+        checkAuth();
+        loadHistory();
+    </script>
+</body>
+</html>

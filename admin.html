@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SchoolMind 138 - Координация</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="Логотип сайта.png?v=2" type="image/png">
+    <link rel="stylesheet" href="css/style.css?v=9">
+</head>
+<body>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <div class="brand-lockup">
+                <img class="brand-seal" src="Логотип сайта.png?v=2" alt="Логотип школы №138">
+                <div class="brand-lockup-copy">
+                    <div class="nav-brand">SchoolMind 138</div>
+                    <div class="brand-subtitle">Координация · школа №138</div>
+                </div>
+            </div>
+
+            <nav class="nav-links">
+                <a href="dashboard.html">Главная</a>
+                <a href="admin.html" class="is-active">Координация</a>
+                <a href="psychologist/table.html">Все тесты</a>
+                <a href="psychologist/stats.html">Статистика</a>
+                <button class="btn-logout" onclick="logout()">Выйти</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="page-shell stack-lg">
+        <section class="masthead masthead--compact surface-card surface-card--compact">
+            <div class="masthead-grid masthead-grid--compact">
+                <div class="section-header section-header--compact">
+                    <p class="eyebrow">Учётные записи</p>
+                    <h1>Доступы учеников</h1>
+                </div>
+
+                <div class="toolbar-actions toolbar-actions--top">
+                    <button class="btn-primary" onclick="exportToGoogleSheets()">Google Таблицы</button>
+                    <button class="btn-secondary" onclick="downloadCSV()">CSV</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="summary-strip">
+            <article class="summary-item">
+                <span>Аккаунтов</span>
+                <p class="summary-value" id="accounts-total">0</p>
+            </article>
+
+            <article class="summary-item">
+                <span>Классов</span>
+                <p class="summary-value" id="accounts-classes">0</p>
+            </article>
+
+            <article class="summary-item">
+                <span>Показано</span>
+                <p class="summary-value" id="accounts-visible">0</p>
+            </article>
+
+            <article class="summary-item">
+                <span>Последняя выдача</span>
+                <p class="summary-value summary-value--compact" id="accounts-last-created">—</p>
+            </article>
+        </section>
+
+        <section class="split-grid split-grid--admin">
+            <article class="surface-card surface-card--compact">
+                <div class="section-header section-header--compact">
+                    <p class="eyebrow">Новая запись</p>
+                    <h2>Создание доступа</h2>
+                </div>
+
+                <form id="create-form" class="form-stack" onsubmit="createStudent(event)">
+                    <div class="form-group">
+                        <label for="student-name">Имя</label>
+                        <input type="text" id="student-name" placeholder="Иван" autocomplete="given-name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="student-surname">Фамилия</label>
+                        <input type="text" id="student-surname" placeholder="Иванов" autocomplete="family-name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="student-class">Класс</label>
+                        <select id="student-class" required>
+                            <option value="">Выберите класс</option>
+                            <option value="5А">5А</option>
+                            <option value="5Б">5Б</option>
+                            <option value="6А">6А</option>
+                            <option value="6Б">6Б</option>
+                            <option value="7А">7А</option>
+                            <option value="7Б">7Б</option>
+                            <option value="8А">8А</option>
+                            <option value="8Б">8Б</option>
+                            <option value="9А">9А</option>
+                            <option value="9Б">9Б</option>
+                            <option value="10А">10А</option>
+                            <option value="10Б">10Б</option>
+                            <option value="11А">11А</option>
+                            <option value="11Б">11Б</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Создать учётную запись</button>
+                    <div id="create-feedback" class="inline-feedback" hidden aria-live="polite"></div>
+                </form>
+            </article>
+
+            <article class="surface-card surface-card--compact">
+                <div class="section-header section-header--compact">
+                    <p class="eyebrow">Аккаунты</p>
+                    <h2>Список доступов</h2>
+                    <p id="accounts-status" class="section-meta">Последние выданные реквизиты.</p>
+                </div>
+
+                <div class="accounts-toolbar">
+                    <div class="form-group accounts-search">
+                        <label for="accounts-search" class="sr-only">Поиск аккаунтов</label>
+                        <input type="text" id="accounts-search" placeholder="Имя, класс или логин" oninput="loadAccounts()" autocomplete="off">
+                    </div>
+                    <button type="button" id="accounts-toggle" class="btn-secondary accounts-toggle" onclick="toggleAccountsExpanded()" style="display: none;"></button>
+                </div>
+
+                <div id="accounts-list" class="accounts-list"></div>
+            </article>
+        </section>
+    </main>
+
+    <script src="js/app.js?v=7"></script>
+    <script>
+        checkAuth();
+        loadAccounts();
+    </script>
+</body>
+</html>

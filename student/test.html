@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SchoolMind 138 - Тест</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="../Логотип сайта.png?v=2" type="image/png">
+    <link rel="stylesheet" href="../css/style.css?v=9">
+</head>
+<body>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <div class="brand-lockup">
+                <img class="brand-seal" src="../Логотип сайта.png?v=2" alt="Логотип школы №138">
+                <div class="brand-lockup-copy">
+                    <div class="nav-brand">SchoolMind 138</div>
+                    <div class="brand-subtitle">Кабинет ученика · школа №138</div>
+                </div>
+            </div>
+
+            <nav class="nav-links">
+                <a href="../dashboard.html">Главная</a>
+                <a href="test.html" class="is-active">Тест</a>
+                <a href="history.html">История</a>
+                <button class="btn-logout" onclick="logout()">Выйти</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="page-shell stack-lg">
+        <section class="masthead masthead--compact surface-card surface-card--compact">
+            <div class="masthead-grid masthead-grid--compact">
+                <div class="section-header section-header--compact">
+                    <p class="eyebrow">Тест</p>
+                    <h1>Шкала тревожности</h1>
+                </div>
+
+                <div class="badge-row page-tags page-tags--align-end">
+                    <span class="badge">15 вопросов</span>
+                    <span class="badge">Шкала 0-5</span>
+                    <span class="badge">Цифры и Enter</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="test-stage" class="test-stage is-intro-active">
+            <ol id="test-questions-source" class="sr-only" aria-hidden="true">
+                <li>Я чувствую напряжение или нервозность.</li>
+                <li>Меня беспокоят мысли о будущем.</li>
+                <li>Я легко волнуюсь по пустякам.</li>
+                <li>У меня бывает учащённое сердцебиение.</li>
+                <li>Я плохо сплю из-за беспокойства.</li>
+                <li>Я чувствую себя неуверенно.</li>
+                <li>Мне трудно сосредоточиться.</li>
+                <li>Я боюсь совершить ошибку.</li>
+                <li>Я переживаю за оценки.</li>
+                <li>Мне трудно общаться с другими.</li>
+                <li>Я чувствую усталость без причины.</li>
+                <li>У меня бывает головная боль.</li>
+                <li>Я беспокоюсь о здоровье.</li>
+                <li>Мне сложно расслабиться.</li>
+                <li>Я чувствую давление от ожиданий других.</li>
+            </ol>
+
+            <div id="test-book" class="test-book" aria-hidden="true"></div>
+
+            <section id="test-form" class="test-wizard" aria-live="polite">
+                <div class="test-wizard-frame surface-card">
+                    <div class="test-wizard-top">
+                        <button type="button" id="test-back" class="btn-secondary test-back" onclick="goToPreviousQuestion()">Назад</button>
+
+                        <div class="test-progress-block">
+                            <div class="test-progress-copy">
+                                <span class="eyebrow">Вопрос <span id="test-current-step">1</span> / <span id="test-total-steps">15</span></span>
+                                <span id="test-progress-meta" class="meta-text">0 ответов</span>
+                            </div>
+                            <div class="test-progress-track" aria-hidden="true">
+                                <span id="test-progress-fill"></span>
+                            </div>
+                        </div>
+
+                        <div id="test-selected-value" class="badge">Ответ не выбран</div>
+                    </div>
+
+                    <article id="test-card" class="test-card"></article>
+                </div>
+            </section>
+        </section>
+
+        <div id="result" class="result-box" style="display: none;"></div>
+    </main>
+
+    <script src="../js/app.js?v=7"></script>
+    <script src="../js/test-wizard.js?v=5"></script>
+    <script>
+        checkAuth();
+        initTestWizard();
+    </script>
+</body>
+</html>
