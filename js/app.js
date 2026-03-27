@@ -1,7 +1,5 @@
-// === КОНСТАНТЫ ===
 const BRAND_NAME = "SchoolMind 138";
 
-// === БАЗА ДАННЫХ (localStorage) ===
 const DB = {
     init() {
         const users = JSON.parse(localStorage.getItem("sm_users") || "[]");
@@ -32,7 +30,7 @@ const DB = {
         return user;
     },
 
-    //Процесс создания логина для пользователя 138+класс+первые две буквы фамилии+случайные числа
+    //Создание паролей да логинов для пользователя 138+класс+первые две буквы фамилии+случайные числа
     createStudent(name, surname, className) {
         const users = DB.getUsers();
         const classPart = className.replace("А", "A").replace("Б", "B");
@@ -77,7 +75,7 @@ const DB = {
         });
     },
 
-    // Статистика: total, average, min, max + распределение по уровням + по классам
+    // Статистика православная
     getStats(classFilter = "") {
         let tests = DB.getAllTests();
         if (classFilter) tests = tests.filter((t) => t.class === classFilter);
@@ -93,7 +91,7 @@ const DB = {
         const scores = tests.map((t) => t.score);
         const perClass = new Map();
 
-        // Группировка по классам
+        // Группировка по классам народным
         tests.forEach((test) => {
             if (!test.class) return;
             if (!perClass.has(test.class)) perClass.set(test.class, { count: 0, total: 0 });
@@ -128,18 +126,16 @@ const DB = {
 
 DB.init();
 
-// === УТИЛИТЫ ===
-// Уровни тревожности
+// подсчеты по уровням
 const getLevelMeta = {
     low: { label: "Низкий", title: "Низкий уровень тревожности", description: "Выраженных признаков тревожности не видно.", recommendation: "Сохраняйте привычный режим.", tone: "Спокойный фон" },
     medium: { label: "Средний", title: "Средний уровень тревожности", description: "Есть напряжение за которым стоит понаблюдать.", recommendation: "Снизьте нагрузку и повторите тест позже.", tone: "Нужен контроль" },
     high: { label: "Высокий", title: "Высокий уровень тревожности", description: "Тревожность может мешать учебе.", recommendation: "Стоит обсудить результат с школьным специалистом.", tone: "Обратитесь к психологу" }
 };
 
-// Определить уровень: >50 = high, >25 = medium, иначе low
+// Определение уровняя
 const getLevelByScore = (score) => score > 50 ? "high" : score > 25 ? "medium" : "low";
 
-// Экранирование HTML
 const escapeAppHtml = (v) => String(v ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
 
 // Дата и время
@@ -155,19 +151,18 @@ const pluralizeRu = (c, one, few, many) => {
     return many;
 };
 
-// Пути
 const getBasePath = () => window.location.pathname.includes("/student/") || window.location.pathname.includes("/psychologist/") ? "../" : "";
 const resolvePath = (p) => `${getBasePath()}${p}`;
 const redirectTo = (p) => window.location.href = resolvePath(p);
 
-// === АВТОРИЗАЦИЯ ===
+// ВХод
 const getToken = () => localStorage.getItem("sm_token");
 const getUser = () => { const raw = localStorage.getItem("sm_user"); return raw ? JSON.parse(raw) : null; };
 const saveAuth = (user) => { localStorage.setItem("sm_token", String(user.id)); localStorage.setItem("sm_user", JSON.stringify(user)); };
 const clearAuth = () => { localStorage.removeItem("sm_token"); localStorage.removeItem("sm_user"); };
 const logout = () => { clearAuth(); redirectTo("index.html"); };
 
-// Проверка доступа
+// Проверка что есть доступ
 const checkAuth = () => {
     const token = getToken(), user = getUser(), path = window.location.pathname;
     if (!token || !user) { redirectTo("index.html"); return false; }
@@ -184,7 +179,6 @@ const checkAuth = () => {
         return true;
     }
 
-    // Защита страниц по ролям
     if (path.includes("admin.html") && user.role !== "admin") { redirectTo("dashboard.html"); return false; }
     if (path.includes("/student/") && user.role !== "student") { redirectTo("dashboard.html"); return false; }
     if (path.includes("/psychologist/") && user.role !== "psychologist") { redirectTo("dashboard.html"); return false; }
@@ -207,7 +201,6 @@ const checkAuth = () => {
     return true;
 };
 
-// === TOAST ===
 const ensureToastStack = () => {
     let stack = document.querySelector(".app-toast-stack");
     if (stack) return stack;
@@ -229,15 +222,13 @@ const showToast = (message, tone = "neutral") => {
     }, 2200);
 };
 
-// === ФОРМЫ ===
-// Вход по Enter
+// Если энтер нажать то войдется
 const handleLoginKeydown = (event) => {
     if (event.key !== "Enter" || event.target?.id !== "login-email") return;
     event.preventDefault();
     document.getElementById("login-password")?.focus();
 };
 
-// Обработка входа
 const doLogin = (event) => {
     if (event) event.preventDefault();
     const login = document.getElementById("login-email").value.trim();
@@ -256,7 +247,6 @@ const doLogin = (event) => {
     } catch (error) { if (errorEl) errorEl.textContent = error.message; }
 };
 
-// Feedback после создания
 const renderCreateFeedback = (state, title, text, details = "") => {
     const feedback = document.getElementById("create-feedback");
     if (!feedback) return false;
@@ -292,11 +282,11 @@ const createStudent = (event) => {
     loadAccounts();
 };
 
-// === СПИСКИ УЧЕНИКОВ ===
+// Тут списки
 const accountsUiState = { expanded: false };
 const toggleAccountsExpanded = () => { accountsUiState.expanded = !accountsUiState.expanded; loadAccounts(); };
 
-// Загрузить список учеников
+// подгрузить список 
 const loadAccounts = () => {
     const students = DB.getUsers().filter((u) => u.role === "student");
     const container = document.getElementById("accounts-list");
@@ -322,7 +312,7 @@ const loadAccounts = () => {
         return;
     }
 
-    // Поиск
+    // поиск по списку
     const sorted = [...students].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     const filtered = query ? sorted.filter((u) => [u.name, u.class, u.login].filter(Boolean).some((v) => v.toLowerCase().includes(query))) : sorted;
 
@@ -362,7 +352,7 @@ const loadAccounts = () => {
     `).join("");
 };
 
-// === ИСТОРИЯ ===
+// история тестов 
 const loadHistory = () => {
     const user = getUser();
     const container = document.getElementById("history-list");
@@ -378,7 +368,6 @@ const loadHistory = () => {
     }).join("");
 };
 
-// === СТАТИСТИКА ===
 const loadClasses = () => {
     const classes = DB.getClasses();
     document.querySelectorAll("#class-filter").forEach((select) => {
@@ -444,7 +433,7 @@ const loadStats = () => {
     }
 };
 
-// === ТАБЛИЦА ТЕСТОВ ===
+// тесты
 const loadAllTests = () => {
     const classFilter = document.getElementById("class-filter")?.value || "";
     const searchQuery = document.getElementById("tests-search")?.value.trim().toLowerCase() || "";
@@ -483,7 +472,6 @@ const loadAllTests = () => {
     }).join("");
 };
 
-// === ЭКСПОРТ ===
 const buildCsvRows = (tests, users) => {
     const header = "Дата;Фамилия Имя;Класс;Логин;Балл;Уровень\n";
     const rows = tests.map((test) => {
@@ -493,7 +481,7 @@ const buildCsvRows = (tests, users) => {
     return header + rows.join("\n");
 };
 
-// Гугл таблицы (доработать)
+// Гугл таблицы (доработать или убрать ваще)
 const exportToGoogleSheets = () => {
     const tests = DB.getAllTests();
     const users = DB.getUsers();
