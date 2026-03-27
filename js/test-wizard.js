@@ -1,4 +1,4 @@
-// Шкала ответов: 0-5 (Никогда → Почти всегда)
+// ответы от 0 до 5
 const TEST_SCALE = [
     { value: 0, label: "0", caption: "Никогда", tone: "low" },
     { value: 1, label: "1", caption: "Редко", tone: "low" },
@@ -19,38 +19,30 @@ const testWizardState = {
     keyboardBound: false
 };
 
-// Экранирование HTML
 const escapeHtml = (v) => String(v ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
 
-// Проверка accessibility - отключить анимации
 const prefersReducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-// Получить вопросы из скрытого списка
 const getTestQuestions = () => Array.from(document.querySelectorAll("#test-questions-source li")).map((item, i) => ({ index: i + 1, text: item.textContent.trim() }));
 
-// Сколько вопросов отвечено
 const countAnsweredTestQuestions = () => testWizardState.answers.filter((v) => Number.isInteger(v)).length;
 
-// Текст выбранного ответа
 const getSelectedAnswerLabel = (value) => {
     const opt = TEST_SCALE.find((o) => o.value === value);
     return opt ? `${opt.label} · ${opt.caption}` : "Ответ не выбран";
 };
 
-// Кнопки ответов
 const getTestAnswerButtons = () => Array.from(document.querySelectorAll(".test-answer"));
 const getActiveTestAnswer = () => document.activeElement?.closest(".test-answer");
 
-// Текущий ответ для клавиатуры
 const getKeyboardTestAnswer = () => {
     const answers = getTestAnswerButtons();
     return getActiveTestAnswer() || document.querySelector(".test-answer.is-selected") || answers[0] || null;
 };
 
-// Фокус на текущий ответ
 const focusCurrentAnswer = () => getKeyboardTestAnswer()?.focus({ preventScroll: true });
 
-// Перемещение по ответам стрелками
+// перемещение между карточками стрелочками на клаве
 const moveTestAnswerFocus = (direction) => {
     const answers = getTestAnswerButtons();
     const currentAnswer = getKeyboardTestAnswer();
@@ -60,7 +52,7 @@ const moveTestAnswerFocus = (direction) => {
     answers[nextIndex]?.focus({ preventScroll: true });
 };
 
-// Клавиши: 0-5 выбор, стрелки навигация, Enter/пробел - подтвердить, Backspace - назад
+// кнопочк: 0-5 выбор, стрелки навигация, Enter/пробел - подтвердить, Backspace - назад
 const bindTestWizardKeyboard = () => {
     if (testWizardState.keyboardBound) return;
     document.addEventListener("keydown", handleTestWizardKeydown);
@@ -84,7 +76,7 @@ const handleTestWizardKeydown = (event) => {
     }
 };
 
-// Книжка вопросов на фоне (анимация)
+// книжка на фоне (анимашке)
 const buildTestBook = () => {
     const book = document.getElementById("test-book");
     if (!book) return;
@@ -97,7 +89,7 @@ const buildTestBook = () => {
     }).join("");
 };
 
-// Обновить прогресс: шаг, ответы, кнопка назад
+// обновить прогресс: шаг, ответы, кнопка назад
 const updateTestWizardChrome = () => {
     const total = testWizardState.questions.length;
     const current = testWizardState.currentIndex + 1;
@@ -122,7 +114,7 @@ const updateTestWizardChrome = () => {
     }
 };
 
-// Карточка вопроса
+// сама карточка
 const buildTestCardMarkup = (question, selectedValue) => {
     const helperText = testWizardState.currentIndex === testWizardState.questions.length - 1 ? "Последний ответ сразу покажет итог." : "Выберите значение и переход произойдёт автоматически.";
 
@@ -147,7 +139,6 @@ const buildTestCardMarkup = (question, selectedValue) => {
     `;
 };
 
-// Рендер вопроса с анимацией
 const renderTestQuestion = (direction = "instant") => {
     const card = document.getElementById("test-card");
     const question = testWizardState.questions[testWizardState.currentIndex];
@@ -179,7 +170,7 @@ const renderTestQuestion = (direction = "instant") => {
     }, 140);
 };
 
-// Инициализация теста
+// загрузка
 const initTestWizard = () => {
     const card = document.getElementById("test-card");
     const stage = document.getElementById("test-stage");
@@ -220,7 +211,7 @@ const initTestWizard = () => {
     }, introDuration);
 };
 
-// Выбор ответа - переход к следующему вопросу
+// сам выбор и переход к следующему
 const selectTestAnswer = (value) => {
     if (!testWizardState.ready || testWizardState.isAnimating) return;
 
@@ -240,14 +231,14 @@ const selectTestAnswer = (value) => {
     }, 220);
 };
 
-// Назад по вопросам
+// назад
 const goToPreviousQuestion = () => {
     if (!testWizardState.ready || testWizardState.isAnimating || testWizardState.currentIndex === 0) return;
     testWizardState.currentIndex--;
     renderTestQuestion("backward");
 };
 
-// Сохранить результат: сумма баллов + уровень
+// сохранка
 const saveTestResult = (answers) => {
     const user = getUser();
     const score = answers.reduce((s, v) => s + v, 0);
@@ -256,7 +247,7 @@ const saveTestResult = (answers) => {
     return { score, level };
 };
 
-// Завершение теста - показать результат
+// конец теста
 const submitTest = (event) => {
     if (event) event.preventDefault();
 
