@@ -242,7 +242,7 @@ const doLogin = (event) => {
         const user = DB.login(login, password);
         saveAuth(user);
         if (user.role === "admin") window.location.href = "admin.html";
-        else if (user.role === "psychologist") window.location.href = "psychologist/stats.html";
+        else if (user.role === "psychologist") window.location.href = "psychologist/table.html";
         else window.location.href = "dashboard.html";
     } catch (error) { if (errorEl) errorEl.textContent = error.message; }
 };
@@ -382,10 +382,10 @@ const loadStats = () => {
     const stats = DB.getStats(classFilter);
     const filteredTests = DB.getAllTests().filter((t) => !classFilter || t.class === classFilter);
 
-    const totalEl = document.getElementById("total-tests");
-    const avgEl = document.getElementById("avg-score");
+    const totalEl = document.getElementById("tests-total");
+    const avgEl = document.getElementById("tests-average");
     const dominantEl = document.getElementById("dominant-level");
-    const classesCountEl = document.getElementById("stats-classes-count");
+    const classesCountEl = document.getElementById("tests-classes");
     const scopeEl = document.getElementById("stats-scope");
     const distributionStatusEl = document.getElementById("distribution-status");
     const classStatusEl = document.getElementById("class-status");
@@ -481,18 +481,6 @@ const buildCsvRows = (tests, users) => {
     return header + rows.join("\n");
 };
 
-// Гугл таблицы (доработать или убрать ваще)
-const exportToGoogleSheets = () => {
-    const tests = DB.getAllTests();
-    const users = DB.getUsers();
-    if (!tests.length) { showToast("Нет данных для экспорта", "warning"); return; }
-
-    const csv = buildCsvRows(tests, users);
-    const encoded = encodeURIComponent(csv);
-    const url = `https://docs.google.com/spreadsheets/u/0/create?usp=sharing&title=${encodeURIComponent(BRAND_NAME)}&text=${encoded}`;
-    window.open(url, "_blank");
-    showToast("Открыта новая таблица Google", "success");
-};
 
 const downloadCSV = () => {
     const tests = DB.getAllTests();

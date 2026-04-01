@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SchoolMind 138 - Все тесты</title>
+    <title>SchoolMind 138 - Аналитика</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
@@ -23,9 +23,8 @@
 
             <nav class="nav-links">
                 <a href="../dashboard.html">Главная</a>
-                <a href="../admin.html">Координация</a>
-                <a href="table.html" class="is-active">Все тесты</a>
-                <a href="stats.html">Статистика</a>
+                <a href="../admin.html">Администратор</a>
+                <a href="table.html" class="is-active">Аналитика</a>
                 <button class="btn-logout" onclick="logout()">Выйти</button>
             </nav>
         </div>
@@ -35,20 +34,19 @@
         <section class="masthead masthead--compact surface-card surface-card--compact">
             <div class="masthead-grid masthead-grid--compact">
                 <div class="section-header section-header--compact">
-                    <p class="eyebrow">Журнал</p>
-                    <h1>Все тесты</h1>
+                    <p class="eyebrow">Аналитика</p>
+                    <h1>Статистика и журнал</h1>
                 </div>
 
                 <div class="toolbar-actions toolbar-actions--top">
-                    <button class="btn-primary" onclick="exportToGoogleSheets()">Google Таблицы</button>
-                    <button class="btn-secondary" onclick="downloadCSV()">CSV</button>
+                    <button class="btn-primary" onclick="downloadCSV()">CSV</button>
                 </div>
             </div>
         </section>
 
         <section class="summary-strip">
             <article class="summary-item">
-                <span>Результатов</span>
+                <span>Тестов</span>
                 <p class="summary-value" id="tests-total">0</p>
             </article>
 
@@ -58,20 +56,20 @@
             </article>
 
             <article class="summary-item">
-                <span>Классов</span>
-                <p class="summary-value" id="tests-classes">0</p>
+                <span>Доминирующий уровень</span>
+                <p class="summary-value summary-value--compact" id="dominant-level">—</p>
             </article>
 
             <article class="summary-item">
-                <span>Последний тест</span>
-                <p class="summary-value summary-value--compact" id="tests-latest">—</p>
+                <span>Классов</span>
+                <p class="summary-value" id="tests-classes">0</p>
             </article>
         </section>
 
         <section class="filter filter--compact analytics-filter">
             <div class="filter-control">
                 <label for="class-filter">Класс</label>
-                <select id="class-filter" onchange="loadAllTests()">
+                <select id="class-filter" onchange="loadAllTests(); loadStats();">
                     <option value="">Все классы</option>
                 </select>
             </div>
@@ -84,10 +82,30 @@
             <div id="tests-scope" class="badge filter-badge">Вся школа</div>
         </section>
 
+        <section id="stats-content" class="stack-lg stats-layout">
+            <section class="surface-card surface-card--compact">
+                <div class="section-header section-header--compact">
+                    <p class="eyebrow">Уровни</p>
+                    <h2>Распределение тревожности</h2>
+                    <p id="distribution-status" class="section-meta">Сводка по выбранному срезу.</p>
+                </div>
+                <div id="distribution" class="distribution-list"></div>
+            </section>
+
+            <section class="surface-card surface-card--compact">
+                <div class="section-header section-header--compact">
+                    <p class="eyebrow">Классы</p>
+                    <h2>Показатели по классам</h2>
+                    <p id="class-status" class="section-meta">Средние значения по каждому классу.</p>
+                </div>
+                <div id="by-class" class="class-stats-list"></div>
+            </section>
+        </section>
+
         <section class="data-surface surface-card--compact">
             <div class="section-header section-header--compact">
-                <p class="eyebrow">Результаты</p>
-                <h2>Журнал прохождений</h2>
+                <p class="eyebrow">Журнал</p>
+                <h2>Прохождения</h2>
                 <p id="tests-status" class="section-meta">Все записи по школе.</p>
             </div>
 
@@ -113,6 +131,7 @@
         checkAuth();
         loadClasses();
         loadAllTests();
+        loadStats();
     </script>
 </body>
 </html>
